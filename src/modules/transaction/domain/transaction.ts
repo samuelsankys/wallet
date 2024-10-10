@@ -1,5 +1,4 @@
 import { Entity } from 'src/shared/application/domain/entity';
-import { TransactionDTO } from '../dto/transaction.DTO';
 
 export enum TransactionStatusEnum {
   PENDING = 'PENDING',
