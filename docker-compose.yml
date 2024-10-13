@@ -1,0 +1,28 @@
+version: '3'
+services:
+  transaction_app:
+      build: ./service-transaction
+      ports:
+        - "3001:3000"  
+      env_file:
+        - ./service-transaction/.env
+      environment:
+        DATABASE_URL: ${DATABASE_URL}
+      depends_on:
+        - postgres_transaction 
+      volumes:
+        - .:/app 
+  postgres_transaction:
+    image: postgres:16.4-alpine
+    env_file:
+        - ./service-transaction/.env
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - ./service-transaction/src/infra/database/prisma/create-database.sql:/docker-entrypoint-initdb.d/init.sql
+
+  
