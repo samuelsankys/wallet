@@ -9,8 +9,10 @@ export class TransactionDepositListener {
 
   @OnEvent('transaction.deposited')
   handle(event: EventDTO) {
-    const { amount, walletId } = event;
-    this.transactionDepositUseCase.execute({ eventId: event.id, amount, walletId });
+    const { amount, walletId, eventId } = event;
+    console.log({ event });
+
+    this.transactionDepositUseCase.execute({ eventId, amount, walletId });
     return { ok: 'ok' };
   }
 }

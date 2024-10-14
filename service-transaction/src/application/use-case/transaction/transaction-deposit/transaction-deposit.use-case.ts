@@ -13,10 +13,13 @@ export class TransactionDepositUseCase {
 
   public async execute(input: TransactionDepositDTO): Promise<void> {
     const { eventId, walletId, amount } = input;
+
+    console.log({ eventId, walletId, amount });
     console.log('entrou no use case de deposit');
 
     const currentBalance = await this.balanceService.getCurrentBalance(walletId);
     const transaction = Transaction.create({ walletId, eventId });
+    console.log({ currentBalance, transaction });
 
     try {
       transaction.deposit(amount, currentBalance);

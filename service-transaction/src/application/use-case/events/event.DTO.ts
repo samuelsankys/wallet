@@ -1,5 +1,5 @@
 export interface EventDTO {
-  id: string;
+  eventId: string;
   timeStamp?: string;
   walletId: string;
   type: string;

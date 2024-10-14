@@ -9,19 +9,21 @@ export class PgTransactionRepository implements ITransactionRepository {
   constructor(private readonly prisma: PrismaService) {}
   async create(transaction: Transaction): Promise<Transaction> {
     const data = TransactionMapper.toPersistence(transaction);
-    const result = await this.prisma.transaction.create({
+    console.log({ data });
+
+    const result = await this.prisma.transactions.create({
       data,
     });
 
-    return !!result ? TransactionMapper.toDomain({ ...result, amount: +result.amount, afterBalance: +result.afterBalance }) : null;
+    return !!result ? TransactionMapper.toDomain({ ...result, amount: +result.amount, afterBalance: +result.after_balance }) : null;
   }
 
   async findById(transactionId: string): Promise<Transaction> {
-    const result = await this.prisma.transaction.findUnique({
+    const result = await this.prisma.transactions.findUnique({
       where: {
         id: transactionId,
       },
     });
-    return !!result ? TransactionMapper.toDomain({ ...result, amount: +result.amount, afterBalance: +result.afterBalance }) : null;
+    return !!result ? TransactionMapper.toDomain({ ...result, amount: +result.amount, afterBalance: +result.after_balance }) : null;
   }
 }

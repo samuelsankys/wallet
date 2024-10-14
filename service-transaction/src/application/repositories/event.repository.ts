@@ -1,6 +1,6 @@
 export interface EventDAO {
-  id: string;
-  timeStamp?: string;
+  eventId: string;
+  timestamp?: string;
   walletId: string;
   type: string;
   amount: number;

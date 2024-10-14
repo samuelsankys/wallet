@@ -9,38 +9,39 @@ export class TransactionMapper {
     } as TransactionDTO;
   }
 
-  static toDomain(dto: TransactionDTO): Transaction {
+  static toDomain(raw: any): Transaction {
     const transactionOrError = Transaction.create(
       {
-        eventId: dto.eventId,
-        walletId: dto.walletId,
-        type: dto.type as TransactionTypeEnum,
-        amount: +dto.amount,
-        afterBalance: +dto.afterBalance,
-        status: dto.status as TransactionStatusEnum,
-        failingReason: dto.failingReason,
-        externalReference: dto.externalReference,
-        createdAt: dto.createdAt,
-        updatedAt: dto.updatedAt,
+        eventId: raw.event_id,
+        walletId: raw.wallet_id,
+        type: raw.type as TransactionTypeEnum,
+        amount: +raw.amount,
+        afterBalance: +raw.after_balance,
+        status: raw.status as TransactionStatusEnum,
+        failingReason: raw.failing_reason,
+        externalReference: raw.external_reference,
+        createdAt: raw.created_at,
+        updatedAt: raw.updated_at,
       },
-      dto.id,
+      raw.id,
     );
 
     return transactionOrError;
   }
 
-  static toPersistence(transaction: Transaction): TransactionDTO {
+  static toPersistence(transaction: Transaction): any {
     return {
       id: transaction.id,
-      ...transaction.props,
-      externalReference: transaction.externalReference,
-      failingReason: transaction.failingReason,
+      event_id: transaction.eventId,
+      wallet_id: transaction.walletId,
+      external_reference: transaction.externalReference,
+      failing_reason: transaction.failingReason,
       status: transaction.status,
       type: transaction.type,
       amount: transaction.amount ?? 0,
-      afterBalance: transaction.afterBalance ?? 0,
-      createdAt: transaction.createdAt,
-      updatedAt: transaction.updatedAt,
-    } as TransactionDTO;
+      after_balance: transaction.afterBalance ?? 0,
+      created_at: transaction.createdAt,
+      updated_at: transaction.updatedAt,
+    };
   }
 }

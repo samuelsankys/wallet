@@ -9,7 +9,6 @@ export class EventController {
 
   @MessagePattern('events')
   execute(@Body() event: EventDTO) {
-    console.log('entrou no event de transaction');
     return this.eventHandler.handle(event);
   }
 }

@@ -7,27 +7,32 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Event {
+model Events {
     id        String   @id @default(uuid()) @db.Uuid
-    timeStamp DateTime
-    walletId  String   @db.Uuid
+    timestamp DateTime
+    wallet_id String   @db.Uuid
     type      String
     amount    Decimal? @db.Decimal(15, 2)
     source    String
     metadata  String?
+
+    @@map("events")
 }
 
-model Transaction {
-    id                String   @id @default(uuid()) @db.Uuid
-    walletId          String   @db.Uuid
-    eventId           String   @db.Uuid
-    type              String?
-    amount            Decimal? @db.Decimal(15, 2)
-    afterBalance      Decimal? @db.Decimal(15, 2)
-    status            String?
-    externalReference String?
-    failingReason     String?
+model Transactions {
+    id                 String   @id @default(uuid()) @db.Uuid
+    wallet_id          String   @db.Uuid
+    event_id           String   @db.Uuid
+    type               String?
+    amount             Decimal? @db.Decimal(15, 2)
+    after_balance      Decimal? @db.Decimal(15, 2)
+    status             String?
+    external_reference String?
+    failing_reason     String?
+    is_sync            Boolean  @default(false)
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @default(now()) @updatedAt
+    created_at DateTime @default(now())
+    updated_at DateTime @default(now()) @updatedAt
+
+    @@map("transactions")
 }

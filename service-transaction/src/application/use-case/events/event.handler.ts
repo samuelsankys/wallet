@@ -3,13 +3,21 @@ import { MessagePattern } from '@nestjs/microservices';
 import { EventDTO } from './event.DTO';
 import { TransactionTypeEnum } from 'src/application/domain/transaction';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { IEventRepository } from 'src/application/repositories/event.repository';
 
 @Injectable()
 export class EventHandler {
-  constructor(private readonly eventEmitter: EventEmitter2) {}
+  constructor(
+    private readonly eventEmitter: EventEmitter2,
+    private readonly eventRepo: IEventRepository,
+  ) {}
 
   @MessagePattern('event')
-  handle(input: EventDTO) {
+  async handle(input: EventDTO) {
+    const alreadyExists = await this.eventRepo.exists(input.eventId);
+    console.log({ alreadyExists });
+    if (alreadyExists) return true;
+
     switch (input.type) {
       case TransactionTypeEnum.Deposit:
         this.eventEmitter.emit('transaction.deposited', input);
@@ -34,8 +42,8 @@ export class EventHandler {
       default:
         throw new Error("Transaction type doesn't exist");
     }
-    return {
-      ok: true,
-    };
+
+    await this.eventRepo.save(input);
+    return true;
   }
 }

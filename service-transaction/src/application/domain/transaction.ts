@@ -144,19 +144,17 @@ export class Transaction extends Entity<TransactionProps> {
   }
 
   public static create(props: TransactionProps, id?: string): Transaction {
-    if (!props.type) {
-      throw new Error('Transaction type is required');
-    }
-
     const transaction = new Transaction(
       {
         ...props,
+        eventId: props.eventId,
         status: props.status ?? TransactionStatusEnum.PENDING,
         updatedAt: props.updatedAt ?? new Date(),
         createdAt: props.createdAt ?? new Date(),
       },
       id,
     );
+    console.log({ transaction });
 
     return transaction;
   }

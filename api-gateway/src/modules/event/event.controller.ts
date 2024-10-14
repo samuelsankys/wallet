@@ -22,10 +22,19 @@ export class EventController {
   ) {}
 
   @Post()
-  async execute(@Body() event: EventDTO): Promise<string> {
-    const resultA = await firstValueFrom(
-      this.clientTransaction.send('events', event),
-    );
-    return this.eventService.transaction(resultA);
+  async execute(@Body() event: EventDTO) {
+    try {
+      await firstValueFrom(this.clientTransaction.send('events', event));
+      return {
+        status: 'success',
+        message: 'Event processed',
+      };
+    } catch (error) {
+      console.error('Error processing event:', error);
+      return {
+        status: 'error',
+        message: 'Failed to process event',
+      };
+    }
   }
 }
