@@ -1,6 +1,7 @@
 import { v4 as uuid } from 'uuid';
+import { AggregateRoot } from '@nestjs/cqrs';
 
-export abstract class Entity<T> {
+export abstract class Entity<T> extends AggregateRoot {
   protected readonly _id: string;
   public readonly props: T;
 
@@ -9,6 +10,7 @@ export abstract class Entity<T> {
   }
 
   constructor(props: T, id?: string) {
+    super();
     this._id = id || uuid();
     this.props = props;
   }

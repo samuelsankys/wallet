@@ -1,4 +1,5 @@
 import { Entity } from '../entity';
+import { TransactionCompletedEvent } from './events/transaction-completed-event';
 
 export enum TransactionStatusEnum {
   PENDING = 'PENDING',
@@ -17,6 +18,7 @@ export enum TransactionTypeEnum {
 
 interface TransactionProps {
   walletId: string;
+  eventId: string;
   type?: TransactionTypeEnum;
   amount?: number;
   afterBalance?: number;
@@ -30,6 +32,10 @@ interface TransactionProps {
 export class Transaction extends Entity<TransactionProps> {
   get walletId(): string {
     return this.props.walletId;
+  }
+
+  get eventId(): string {
+    return this.props.eventId;
   }
 
   get type(): TransactionTypeEnum {
@@ -138,6 +144,10 @@ export class Transaction extends Entity<TransactionProps> {
   }
 
   public static create(props: TransactionProps, id?: string): Transaction {
+    if (!props.type) {
+      throw new Error('Transaction type is required');
+    }
+
     const transaction = new Transaction(
       {
         ...props,
@@ -159,5 +169,7 @@ export class Transaction extends Entity<TransactionProps> {
 
   private successTransaction() {
     this.props.status = TransactionStatusEnum.COMPLETED;
+
+    this.apply(new TransactionCompletedEvent(this.id, this.type, this.amount, this.afterBalance));
   }
 }

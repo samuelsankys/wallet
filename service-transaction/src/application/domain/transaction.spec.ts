@@ -1,4 +1,4 @@
-import { Transaction, TransactionStatusEnum, TransactionTypeEnum } from './transaction';
+import { Transaction, TransactionStatusEnum, TransactionTypeEnum } from '../../../../service-statement/src/domain/transaction';
 
 describe('Transaction Entity', () => {
   let transaction: Transaction;

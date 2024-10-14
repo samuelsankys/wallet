@@ -10,7 +10,7 @@ async function bootstrap() {
     transport: Transport.RMQ,
     options: {
       urls: [process.env.RABBITMQ_URL || 'amqp://localhost:5672'],
-      queue: 'transaction_queue',
+      queue: 'event_queue',
       queueOptions: {
         durable: true,
       },
@@ -18,5 +18,6 @@ async function bootstrap() {
   });
 
   await app.listen();
+  console.log(`Microservice is listening for RMQ messages`);
 }
 bootstrap();

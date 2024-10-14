@@ -1,5 +1,5 @@
-import { ITransactionRepository } from '../../repositories/transaction.repository';
-import { Transaction, TransactionTypeEnum } from '../../domain/transaction';
+import { ITransactionRepository } from '../../../../repositories/transaction.repository';
+import { Transaction, TransactionTypeEnum } from '../../../../domain/transaction';
 
 import { IWalletService } from '../../../../../src/modules/transaction/services/wallet.service';
 import { TransactionWithdrawalUseCase } from './transaction-withdrawal.use-case';

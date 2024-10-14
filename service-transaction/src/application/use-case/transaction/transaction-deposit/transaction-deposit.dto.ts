@@ -1,5 +1,5 @@
 export interface TransactionDepositDTO {
-  transactionId: string;
+  eventId: string;
   walletId: string;
   amount: number;
 }

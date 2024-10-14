@@ -1,5 +1,5 @@
-import { ITransactionRepository } from '../../repositories/transaction.repository';
-import { Transaction } from '../../domain/transaction';
+import { ITransactionRepository } from '../../../repositories/transaction.repository';
+import { Transaction } from '../../../../../../service-statement/src/domain/transaction';
 
 import { IWalletService } from '../../../../../src/modules/transaction/services/wallet.service';
 import { TransactionDepositUseCase } from './transaction-deposit.use-case';
@@ -27,7 +27,7 @@ describe('MakeDepositUseCase', () => {
 
   it('should execute deposit transaction successfully', async () => {
     const input: TransactionDepositDTO = {
-      transactionId: 'any_transaction_id',
+      eventId: 'any_transaction_id',
       walletId: 'any_wallet_id',
       amount: 10,
     };
