@@ -7,11 +7,10 @@ import { TransactionWithdrawalUseCase } from './transaction-withdrawal/transacti
 import { TransactionDepositListener } from './transaction-deposit/transaction-deposit.listener';
 import { TransactionCreatedHandler } from './transaction-deposit/transaction-deposited.handler';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { BalanceService } from 'src/infra/gateways/service-balance.interface';
-import { MockBalanceService } from 'src/infra/gateways/balance-service';
+import { BalanceModule } from 'src/infra/gateways/balance.module';
 
 @Module({
-  imports: [EventEmitterModule.forRoot()],
+  imports: [EventEmitterModule.forRoot(), BalanceModule],
   controllers: [],
   providers: [
     PrismaService,
@@ -20,7 +19,6 @@ import { MockBalanceService } from 'src/infra/gateways/balance-service';
     TransactionDepositListener,
     TransactionCreatedHandler,
     { provide: ITransactionRepository, useClass: PgTransactionRepository },
-    { provide: BalanceService, useClass: MockBalanceService },
   ],
 })
 export class TransactionModule {}

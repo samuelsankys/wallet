@@ -11,6 +11,18 @@ services:
   #       - postgres_transaction 
   #     volumes:
   #       - .:/app 
+
+  postgres_balance:
+    image: postgres:16.4-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: balance-db
+    ports:
+      - "5434:5432"
+    volumes:
+      - ./service-balance/src/infra/database/prisma/create-database.sql:/docker-entrypoint-initdb.d/init.sql
+
   postgres_transaction:
     image: postgres:16.4-alpine
     environment:

@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { ITransactionRepository } from '../../../repositories/transaction.repository';
-import { BalanceService } from 'src/infra/gateways/service-balance.interface';
 import { TransactionDepositDTO } from './transaction-deposit.dto';
 import { Transaction } from 'src/application/domain/transaction';
+import { IBalanceService } from 'src/infra/gateways/service-balance.interface';
 
 @Injectable()
 export class TransactionDepositUseCase {
   constructor(
     private readonly transactionRepo: ITransactionRepository,
-    private readonly balanceService: BalanceService,
+    private readonly balanceService: IBalanceService,
   ) {}
 
   public async execute(input: TransactionDepositDTO): Promise<void> {

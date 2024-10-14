@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { BalanceService } from 'src/infra/gateways/service-balance.interface';
 import { TransactionWithdrawalDTO } from './transaction-withdrawal.dto';
 import { ITransactionRepository } from 'src/application/repositories/transaction.repository';
 import { Transaction } from 'src/application/domain/transaction';
+import { IBalanceService } from 'src/infra/gateways/service-balance.interface';
 
 @Injectable()
 export class TransactionWithdrawalUseCase {
   constructor(
     private readonly transactionRepo: ITransactionRepository,
-    private readonly balanceService: BalanceService,
+    private readonly balanceService: IBalanceService,
   ) {}
 
   //fazer um deposito com sucesso
