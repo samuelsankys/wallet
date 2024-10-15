@@ -10,20 +10,18 @@ export class PgStatementDAO implements IStatementDAO {
 
   async save(statement: Statement): Promise<void> {
     const data = StatementMapper.toPersistence(statement);
-    console.log({ data });
-
     await this.prisma.statements.create({
       data,
     });
     return;
   }
 
-  // async findById(statementId: string): Promise<Statement> {
-  //   const result = await this.prisma.transactionHistory.findUnique({
-  //     where: {
-  //       id: transactionId,
-  //     },
-  //   });
-  //   return !!result ? TransactionMapper.toDomain(result) : null;
-  // }
+  async find(walletId: string): Promise<Statement[]> {
+    const result = await this.prisma.statements.findMany({
+      where: {
+        wallet_id: walletId,
+      },
+    });
+    return !!result?.length ? result.map(StatementMapper.toEntity) : null;
+  }
 }

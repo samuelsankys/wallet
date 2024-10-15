@@ -9,8 +9,11 @@ export class StatementController {
 
   @MessagePattern('transaction.completed')
   async handleSaveStatement(event: TransactionCompletedEvent) {
-    console.log('============================== handleSaveStatement');
-
     await this.statementService.saveStatement(event);
+  }
+
+  @MessagePattern('statement.get')
+  async getStatement(walletId: string) {
+    return await this.statementService.getStatement(walletId);
   }
 }

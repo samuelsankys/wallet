@@ -1,28 +1,21 @@
-import { Body, Controller, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Inject, Post, ValidationPipe } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { firstValueFrom } from 'rxjs';
-import { EventService } from './event.service';
+import { EventRequest, EventResponse } from './event.DTO';
 
-export interface EventDTO {
-  eventId: string;
-  timeStamp?: string;
-  walletId: string;
-  type: string;
-  amount: number;
-  source: string;
-  metadata: object;
-}
-
+@ApiTags('Events')
 @Controller('events')
 export class EventController {
   constructor(
-    private readonly eventService: EventService,
     @Inject('EVENT_SERVICE')
     private readonly clientTransaction: ClientProxy,
   ) {}
 
   @Post()
-  async execute(@Body() event: EventDTO) {
+  @ApiOperation({ summary: 'Send event to transaction service' })
+  @ApiResponse({ status: 200, type: EventResponse })
+  async execute(@Body(new ValidationPipe()) event: EventRequest) {
     try {
       await firstValueFrom(this.clientTransaction.send('events', event));
       return {

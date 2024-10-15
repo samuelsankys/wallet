@@ -12,8 +12,8 @@ export class BalanceController {
   }
 
   @MessagePattern('get_balance')
-  async handleGetBalance(input: { walletId: string }) {
-    const result = await this.balanceService.getBalance(input.walletId);
+  async handleGetBalance(walletId: string) {
+    const result = await this.balanceService.getBalance(walletId);
     return result;
   }
 }
