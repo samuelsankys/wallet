@@ -10,6 +10,12 @@ import { BalanceModule } from 'src/infra/gateways/balance.module';
 import { TransactionCreatedHandler } from './transaction-deposited.handler';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TransactionWithdrawalListener } from './transaction-withdrawal/transaction-withdrawal.listener';
+import { TransactionPurchaseListener } from './transaction-purchase/transaction-purchase.listener';
+import { TransactionPurchaseUseCase } from './transaction-purchase/transaction-purchase.use-case';
+import { TransactionRefundListener } from './transaction-refund/transaction-refund.listener';
+import { TransactionRefundUseCase } from './transaction-refund/transaction-refund.use-case';
+import { TransactionReversalListener } from './transaction-reversal/transaction-reversal.listener';
+import { TransactionReversalUseCase } from './transaction-reversal/transaction-reversal.use-case';
 
 @Module({
   imports: [CqrsModule, EventEmitterModule.forRoot(), BalanceModule],
@@ -18,8 +24,16 @@ import { TransactionWithdrawalListener } from './transaction-withdrawal/transact
     PrismaService,
     TransactionDepositUseCase,
     TransactionWithdrawalUseCase,
+    TransactionPurchaseUseCase,
+    TransactionRefundUseCase,
+    TransactionReversalUseCase,
+
     TransactionDepositListener,
     TransactionWithdrawalListener,
+    TransactionRefundListener,
+    TransactionPurchaseListener,
+    TransactionReversalListener,
+
     TransactionCreatedHandler,
     { provide: ITransactionRepository, useClass: PgTransactionRepository },
   ],
