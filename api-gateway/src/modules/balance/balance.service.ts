@@ -12,7 +12,7 @@ export class BalanceService {
 
   async execute(walletId: string): Promise<BalanceResponse> {
     const balance: number = await firstValueFrom(
-      this.clientTransactionBalance.send<number>('get_balance', walletId),
+      this.clientTransactionBalance.send<number>('get_balance', { walletId }),
     );
 
     return { balance };

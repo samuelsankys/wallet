@@ -18,7 +18,7 @@ export class StatementService {
     );
 
     const balance: number = await firstValueFrom(
-      this.clientTransactionBalance.send<number>('get_balance', walletId),
+      this.clientTransactionBalance.send<number>('get_balance', { walletId }),
     );
 
     return { balance, statement };
