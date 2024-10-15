@@ -1,28 +1,28 @@
 import { ITransactionRepository } from '../../../repositories/transaction.repository';
-import { Transaction } from '../../../../../../service-statement/src/domain/transaction';
-
-import { IWalletService } from '../../../../../src/modules/transaction/services/wallet.service';
 import { TransactionDepositUseCase } from './transaction-deposit.use-case';
 import { TransactionDepositDTO } from './transaction-deposit.dto';
+import { Transaction } from 'src/application/domain/transaction';
+import { IBalanceService } from 'src/infra/gateways/service-balance.interface';
 
-describe('MakeDepositUseCase', () => {
+describe('TransactionDepositUseCase', () => {
   let transactionDepositUseCase: TransactionDepositUseCase;
   let mockTransactionRepo: jest.Mocked<ITransactionRepository>;
-  let mockWalletService: jest.Mocked<IWalletService>;
+  let mockBalanceService: jest.Mocked<IBalanceService>;
   let transaction: Transaction;
 
   beforeEach(async () => {
-    transaction: Transaction.create({ walletId: 'any_wallet_id' }, 'any_transaction_id');
-    mockWalletService = {
+    transaction = Transaction.create({ walletId: 'any_wallet_id', eventId: 'any_event_id' }, 'any_transaction_id');
+    mockBalanceService = {
       getCurrentBalance: jest.fn(),
       saveCurrentBalance: jest.fn(),
     };
     mockTransactionRepo = {
       create: jest.fn(),
+      update: jest.fn(),
       findById: jest.fn(),
     };
 
-    transactionDepositUseCase = new TransactionDepositUseCase(mockTransactionRepo, mockWalletService);
+    transactionDepositUseCase = new TransactionDepositUseCase(mockTransactionRepo, mockBalanceService);
   });
 
   it('should execute deposit transaction successfully', async () => {
@@ -33,13 +33,9 @@ describe('MakeDepositUseCase', () => {
     };
 
     mockTransactionRepo.create.mockResolvedValue(transaction);
-    mockWalletService.getCurrentBalance.mockRejectedValueOnce(0);
-
-    // Act
+    mockBalanceService.getCurrentBalance.mockResolvedValue(0);
     const result = await transactionDepositUseCase.execute(input);
-
-    // Assert
-    expect(result).toEqual(transaction);
+    expect(result).toBeUndefined();
     expect(mockTransactionRepo.create).toHaveBeenCalledWith(expect.any(Transaction));
     expect(mockTransactionRepo.create).toHaveBeenCalledTimes(1);
   });

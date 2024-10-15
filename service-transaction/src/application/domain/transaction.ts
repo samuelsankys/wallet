@@ -176,6 +176,7 @@ export class Transaction extends Entity<TransactionProps> {
 
   private successTransaction() {
     this.props.status = TransactionStatusEnum.COMPLETED;
+
     new TransactionCreatedHandler().handle(
       new TransactionCompletedEvent(
         this.id,

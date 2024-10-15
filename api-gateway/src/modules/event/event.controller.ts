@@ -26,7 +26,7 @@ export class EventController {
       console.error('Error processing event:', error);
       return {
         status: 'error',
-        message: 'Failed to process event' + error.message,
+        message: 'Failed to process event',
       };
     }
   }

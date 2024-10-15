@@ -1,16 +1,57 @@
 services:
-  # transaction_app:
-  #     build: ./service-transaction
-  #     ports:
-  #       - "3001:3000"  
-  #     env_file:
-  #       - ./service-transaction/.env
-  #     environment:
-  #       DATABASE_URL: ${DATABASE_URL}
-  #     depends_on:
-  #       - postgres_transaction 
-  #     volumes:
-  #       - .:/app 
+  transaction_app:
+      build: ./service-transaction 
+      env_file:
+        - ./service-transaction/.env
+      environment:
+        DATABASE_URL: postgres://postgres:123456@postgres_transaction:5432/transaction-db
+        RABBITMQ_URL: amqp://rabbitmq:5672
+      depends_on:
+        - postgres_transaction
+        - rabbitmq
+      volumes:
+        - .:/app 
+
+  balance_app:
+    build: ./service-balance 
+    env_file:
+      - ./service-balance/.env
+    environment:
+      DATABASE_URL: postgres://postgres:123456@postgres_balance:5432/balance-db
+      RABBITMQ_URL: amqp://rabbitmq:5672
+    depends_on:
+      - postgres_balance
+      - rabbitmq 
+    volumes:
+      - .:/app 
+    
+  statement_app:
+    build: ./service-statement 
+    env_file:
+      - ./service-statement/.env
+    environment:
+      DATABASE_URL: postgres://postgres:123456@postgres_statement:5432/statement-db
+      RABBITMQ_URL: amqp://rabbitmq:5672
+    depends_on:
+      - postgres_statement
+      - rabbitmq 
+    volumes:
+      - .:/app 
+
+  api_gateway_app:
+    build: ./api-gateway 
+    environment:
+      RABBITMQ_URL: amqp://rabbitmq:5672
+    depends_on:
+      - postgres_statement
+      - rabbitmq
+      - transaction_app
+      - balance_app
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+
   postgres_statement:
     image: postgres:16.4-alpine
     environment:
