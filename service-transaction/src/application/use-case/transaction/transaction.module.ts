@@ -9,6 +9,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { BalanceModule } from 'src/infra/gateways/balance.module';
 import { TransactionCreatedHandler } from './transaction-deposited.handler';
 import { CqrsModule } from '@nestjs/cqrs';
+import { TransactionWithdrawalListener } from './transaction-withdrawal/transaction-withdrawal.listener';
 
 @Module({
   imports: [CqrsModule, EventEmitterModule.forRoot(), BalanceModule],
@@ -18,6 +19,7 @@ import { CqrsModule } from '@nestjs/cqrs';
     TransactionDepositUseCase,
     TransactionWithdrawalUseCase,
     TransactionDepositListener,
+    TransactionWithdrawalListener,
     TransactionCreatedHandler,
     { provide: ITransactionRepository, useClass: PgTransactionRepository },
   ],
