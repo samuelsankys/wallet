@@ -1,4 +1,5 @@
 import { Entity } from '../entity';
+import { TransactionCreatedHandler } from '../use-case/transaction/transaction-deposited.handler';
 import { TransactionCompletedEvent } from './events/transaction-completed-event';
 
 export enum TransactionStatusEnum {
@@ -154,7 +155,6 @@ export class Transaction extends Entity<TransactionProps> {
       },
       id,
     );
-    console.log({ transaction });
 
     return transaction;
   }
@@ -167,7 +167,19 @@ export class Transaction extends Entity<TransactionProps> {
 
   private successTransaction() {
     this.props.status = TransactionStatusEnum.COMPLETED;
+    console.log('============================== complete event ');
 
-    this.apply(new TransactionCompletedEvent(this.id, this.type, this.amount, this.afterBalance));
+    new TransactionCreatedHandler().handle(
+      new TransactionCompletedEvent(
+        this.id,
+        this.walletId,
+        this.type,
+        this.createdAt.toISOString(),
+        this.amount,
+        this.status,
+        this.afterBalance,
+        this.externalReference,
+      ),
+    );
   }
 }

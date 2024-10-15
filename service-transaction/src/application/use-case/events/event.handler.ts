@@ -15,7 +15,6 @@ export class EventHandler {
   @MessagePattern('event')
   async handle(input: EventDTO) {
     const alreadyExists = await this.eventRepo.exists(input.eventId);
-    console.log({ alreadyExists });
     if (alreadyExists) return true;
 
     switch (input.type) {

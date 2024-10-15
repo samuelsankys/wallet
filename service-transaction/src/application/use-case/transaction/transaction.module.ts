@@ -5,12 +5,13 @@ import { ITransactionRepository } from '../../repositories/transaction.repositor
 import { PgTransactionRepository } from '../../repositories/prisma/pg-transaction.repository';
 import { TransactionWithdrawalUseCase } from './transaction-withdrawal/transaction-withdrawal.use-case';
 import { TransactionDepositListener } from './transaction-deposit/transaction-deposit.listener';
-import { TransactionCreatedHandler } from './transaction-deposit/transaction-deposited.handler';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { BalanceModule } from 'src/infra/gateways/balance.module';
+import { TransactionCreatedHandler } from './transaction-deposited.handler';
+import { CqrsModule } from '@nestjs/cqrs';
 
 @Module({
-  imports: [EventEmitterModule.forRoot(), BalanceModule],
+  imports: [CqrsModule, EventEmitterModule.forRoot(), BalanceModule],
   controllers: [],
   providers: [
     PrismaService,
@@ -20,5 +21,6 @@ import { BalanceModule } from 'src/infra/gateways/balance.module';
     TransactionCreatedHandler,
     { provide: ITransactionRepository, useClass: PgTransactionRepository },
   ],
+  exports: [TransactionCreatedHandler],
 })
 export class TransactionModule {}

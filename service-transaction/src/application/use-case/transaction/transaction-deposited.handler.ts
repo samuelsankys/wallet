@@ -11,17 +11,19 @@ export class TransactionCreatedHandler implements IEventHandler<TransactionCompl
       transport: Transport.RMQ,
       options: {
         urls: ['amqp://localhost:5672'],
-        queue: 'transaction_queue',
+        queue: 'statement_queue',
       },
     });
   }
 
   handle(event: TransactionCompletedEvent) {
-    console.log(`Transaction completed: ${event.transactionId}`);
     this.client.emit('transaction.completed', {
       transactionId: event.transactionId,
-      type: event.transactionType,
+      walletId: event.walletId,
+      transactionType: event.transactionType,
+      transactionAt: event.transactionAt,
       amount: event.amount,
+      status: event.status,
       afterBalance: event.afterBalance,
     });
   }
