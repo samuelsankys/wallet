@@ -1,28 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/infra/database/prisma/prisma-connection';
-import { BalanceDAO, IBalanceRepository } from '../balance.repository';
+import { IBalanceRepository } from '../balance.repository';
 
 @Injectable()
 export class PgBalanceRepository implements IBalanceRepository {
   constructor(private readonly prisma: PrismaService) {}
-  async save(balance: BalanceDAO): Promise<void> {
+
+  async save(walletId: string, value: number): Promise<void> {
     const result = await this.prisma.balances.findUnique({
       where: {
-        wallet_id: balance.walletId,
+        wallet_id: walletId,
       },
     });
     if (result) {
       await this.prisma.balances.update({
         where: {
-          wallet_id: balance.walletId,
+          wallet_id: walletId,
         },
         data: {
-          balance: balance.value,
+          balance: value,
         },
       });
     } else {
       await this.prisma.balances.create({
-        data: { wallet_id: balance.walletId, balance: balance.value },
+        data: { wallet_id: walletId, balance: value },
       });
     }
   }

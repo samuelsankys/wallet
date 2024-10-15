@@ -4,6 +4,6 @@ export interface BalanceDAO {
 }
 
 export abstract class IBalanceRepository {
-  abstract save(balance: BalanceDAO): Promise<void>;
+  abstract save(walletId: string, value: number): Promise<void>;
   abstract find(walletId: string): Promise<number>;
 }
