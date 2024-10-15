@@ -1,11 +1,11 @@
-export interface TransactionDTO {
+export interface StatementDTO {
   id: string;
   walletId: string;
-  type?: string;
+  transactionId: string;
+  transactionType: string;
+  transactionAt: Date;
   amount?: number;
   afterBalance?: number;
-  status?: string;
-  failingReason?: string;
   externalReference?: string;
   createdAt?: Date;
   updatedAt?: Date;

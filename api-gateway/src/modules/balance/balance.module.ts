@@ -1,16 +1,17 @@
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { EventController } from './event.controller';
+import { BalanceController } from './balance.controller';
+import { BalanceService } from './balance.service';
 
 @Module({
   imports: [
     ClientsModule.register([
       {
-        name: 'EVENT_SERVICE',
+        name: 'BALANCE_SERVICE',
         transport: Transport.RMQ,
         options: {
           urls: [process.env.RABBITMQ_URL || 'amqp://localhost:5672'],
-          queue: 'event_queue',
+          queue: 'balance_queue',
           queueOptions: {
             durable: true,
           },
@@ -18,6 +19,7 @@ import { EventController } from './event.controller';
       },
     ]),
   ],
-  controllers: [EventController],
+  controllers: [BalanceController],
+  providers: [BalanceService],
 })
-export class EventModule {}
+export class BalanceModule {}
