@@ -3,9 +3,18 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
+  IsPositive,
   IsString,
   IsUUID,
 } from 'class-validator';
+
+enum OperationTypeEnum {
+  Deposit = 'DEPOSIT',
+  Withdrawal = 'WITHDRAWAL',
+  Purchase = 'PURCHASE',
+  Refund = 'REFUND',
+  Reversal = 'REVERSAL',
+}
 
 export class EventRequest {
   @ApiProperty()
@@ -21,14 +30,14 @@ export class EventRequest {
   @ApiProperty()
   timestamp?: string;
 
-  @ApiProperty()
-  @IsString()
+  @ApiProperty({ enum: OperationTypeEnum })
   @IsNotEmpty()
-  type: string;
+  type: OperationTypeEnum;
 
   @ApiProperty()
   @IsNumber()
   @IsNotEmpty()
+  @IsPositive()
   amount: number;
 
   @ApiProperty()

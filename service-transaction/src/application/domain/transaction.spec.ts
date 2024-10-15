@@ -1,4 +1,4 @@
-import { Transaction, TransactionStatusEnum, TransactionTypeEnum } from '../../../../service-statement/src/domain/transaction';
+import { Transaction, TransactionStatusEnum, TransactionTypeEnum } from './transaction';
 
 describe('Transaction Entity', () => {
   let transaction: Transaction;
@@ -8,12 +8,14 @@ describe('Transaction Entity', () => {
 
     transaction = Transaction.create({
       walletId: 'any_id',
+      eventId: 'any_event_id',
     });
   });
 
   it('should create a new transaction with default values', () => {
     const transactionProps = {
       walletId: 'any_id',
+      eventId: 'any_event_id',
       type: TransactionTypeEnum.Deposit,
       amount: 100.0,
     };
@@ -141,6 +143,7 @@ describe('Transaction Entity', () => {
     const currentBalance = 100;
     const notCompletedTransaction = Transaction.create({
       walletId: 'any_another_id',
+      eventId: 'any_event_id',
       amount: 10,
       status: TransactionStatusEnum.FAILED,
       type: TransactionTypeEnum.Purchase,
@@ -155,6 +158,7 @@ describe('Transaction Entity', () => {
     const currentBalance = 100;
     const notCompletedTransaction = Transaction.create({
       walletId: 'any_another_id',
+      eventId: 'any_event_id',
       amount: 10,
       status: TransactionStatusEnum.COMPLETED,
       type: TransactionTypeEnum.Refund,
@@ -162,12 +166,13 @@ describe('Transaction Entity', () => {
 
     expect(() => {
       transaction.refund(notCompletedTransaction, currentBalance);
-    }).toThrow('Not is posible refunded this transaction.');
+    }).toThrow('Not is possible refunded this transaction.');
   });
 
   it('should make refund success', () => {
     const completedTransaction = Transaction.create({
       walletId: 'any_another_id',
+      eventId: 'any_event_id',
       amount: 10,
       status: TransactionStatusEnum.COMPLETED,
       type: TransactionTypeEnum.Purchase,
@@ -187,6 +192,7 @@ describe('Transaction Entity', () => {
     const currentBalance = 100;
     const notCompletedTransaction = Transaction.create({
       walletId: 'any_another_id',
+      eventId: 'any_event_id',
       amount: 10,
       status: TransactionStatusEnum.COMPLETED,
       type: TransactionTypeEnum.Reversal,
@@ -194,12 +200,13 @@ describe('Transaction Entity', () => {
 
     expect(() => {
       transaction.reversal(notCompletedTransaction, currentBalance);
-    }).toThrow('Not is posible reversal this transaction.');
+    }).toThrow('Not is possible reversal this transaction.');
   });
 
   it('should make reversal deposit success', () => {
     const completedTransaction = Transaction.create({
       walletId: 'any_another_id',
+      eventId: 'any_event_id',
       amount: 10,
       status: TransactionStatusEnum.COMPLETED,
       type: TransactionTypeEnum.Deposit,
@@ -218,6 +225,7 @@ describe('Transaction Entity', () => {
   it('should make reversal purchase success', () => {
     const completedTransaction = Transaction.create({
       walletId: 'any_another_id',
+      eventId: 'any_event_id',
       amount: 10,
       status: TransactionStatusEnum.COMPLETED,
       type: TransactionTypeEnum.Purchase,
@@ -236,6 +244,7 @@ describe('Transaction Entity', () => {
   it('should make reversal withdrawal success', () => {
     const completedTransaction = Transaction.create({
       walletId: 'any_another_id',
+      eventId: 'any_event_id',
       amount: 10,
       status: TransactionStatusEnum.COMPLETED,
       type: TransactionTypeEnum.Withdrawal,
@@ -254,6 +263,7 @@ describe('Transaction Entity', () => {
   it('should make reversal Refund success', () => {
     const completedTransaction = Transaction.create({
       walletId: 'any_another_id',
+      eventId: 'any_event_id',
       amount: 10,
       status: TransactionStatusEnum.COMPLETED,
       type: TransactionTypeEnum.Refund,

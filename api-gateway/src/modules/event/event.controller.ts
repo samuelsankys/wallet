@@ -17,7 +17,7 @@ export class EventController {
   @ApiResponse({ status: 200, type: EventResponse })
   async execute(@Body(new ValidationPipe()) event: EventRequest) {
     try {
-      await firstValueFrom(this.clientTransaction.send('events', event));
+      firstValueFrom(this.clientTransaction.send('events', event));
       return {
         status: 'success',
         message: 'Event processed',

@@ -7,13 +7,13 @@ export class BalanceController {
   constructor(private readonly balanceService: BalanceService) {}
 
   @MessagePattern('save_balance')
-  async handleSaveBalance(input: { walletId: string; value: number }) {
-    await this.balanceService.saveBalance(input.walletId, input.value);
+  async handleSaveBalance(payload: { walletId: string; value: number }) {
+    await this.balanceService.saveBalance(payload.walletId, payload.value);
   }
 
   @MessagePattern('get_balance')
-  async handleGetBalance(walletId: string) {
-    const result = await this.balanceService.getBalance(walletId);
+  async handleGetBalance(payload: { walletId: string }) {
+    const result = await this.balanceService.getBalance(payload.walletId);
     return result;
   }
 }

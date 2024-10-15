@@ -25,11 +25,7 @@ export class StatementService {
   }
 
   async getStatement(walletId: string): Promise<Statement[]> {
-    console.log({ walletId });
-
     const response = await this.statementDAO.find(walletId);
-    console.log({ response });
-
     return response;
   }
 }

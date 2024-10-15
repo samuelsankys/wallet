@@ -7,6 +7,7 @@ export enum TransactionStatusEnum {
   COMPLETED = 'COMPLETED',
   FAILED = 'FAILED',
   CANCELED = 'CANCELED',
+  REFUNDED = 'REFUNDED',
 }
 
 export enum TransactionTypeEnum {
@@ -118,22 +119,22 @@ export class Transaction extends Entity<TransactionProps> {
   }
 
   public refund(transaction: Transaction, currentBalance: number): void {
-    if (transaction.status !== TransactionStatusEnum.COMPLETED) throw Error('Is not a valid transaction.');
-    if (transaction.type !== TransactionTypeEnum.Purchase) throw Error('Not is posible refunded this transaction.');
     this.props.type = TransactionTypeEnum.Refund;
     this.props.amount = transaction.amount;
     this.props.externalReference = transaction.id;
+    if (transaction.status !== TransactionStatusEnum.COMPLETED) this.failedTransaction('Is not a valid transaction.');
+    if (transaction.type !== TransactionTypeEnum.Purchase) this.failedTransaction('Not is possible refunded this transaction.');
     this.props.afterBalance = currentBalance + transaction.amount;
     this.successTransaction();
   }
 
   public reversal(transaction: Transaction, currentBalance: number): void {
-    if (transaction.status !== TransactionStatusEnum.COMPLETED) throw Error('Is not a valid transaction.');
-    if (transaction.type === TransactionTypeEnum.Reversal) throw Error('Not is posible reversal this transaction.');
-
     this.props.type = TransactionTypeEnum.Reversal;
     this.props.amount = transaction.amount;
     this.props.externalReference = transaction.id;
+    if (transaction.status !== TransactionStatusEnum.COMPLETED) this.failedTransaction('Is not a valid transaction.');
+    if (transaction.type === TransactionTypeEnum.Reversal) this.failedTransaction('Not is possible reversal this transaction.');
+
     if (transaction.type === TransactionTypeEnum.Purchase || transaction.type === TransactionTypeEnum.Withdrawal) {
       this.props.afterBalance = currentBalance + transaction.amount;
     }
@@ -142,6 +143,14 @@ export class Transaction extends Entity<TransactionProps> {
       this.props.afterBalance = currentBalance - transaction.amount;
     }
     this.successTransaction();
+  }
+
+  cancelTransaction() {
+    this.props.status = TransactionStatusEnum.CANCELED;
+  }
+
+  refundTransaction() {
+    this.props.status = TransactionStatusEnum.REFUNDED;
   }
 
   public static create(props: TransactionProps, id?: string): Transaction {
@@ -162,12 +171,11 @@ export class Transaction extends Entity<TransactionProps> {
   private failedTransaction(messageError: string) {
     this.props.failingReason = messageError;
     this.props.status = TransactionStatusEnum.FAILED;
-    throw Error(messageError);
+    throw new Error(messageError);
   }
 
   private successTransaction() {
     this.props.status = TransactionStatusEnum.COMPLETED;
-    console.log('============================== complete event ');
 
     new TransactionCreatedHandler().handle(
       new TransactionCompletedEvent(

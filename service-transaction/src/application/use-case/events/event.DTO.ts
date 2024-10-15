@@ -5,5 +5,5 @@ export interface EventDTO {
   type: string;
   amount: number;
   source: string;
-  metadata: object;
+  metadata: any;
 }
