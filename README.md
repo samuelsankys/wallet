@@ -1,15 +1,15 @@
-# Carteira Digital - Wallet
+# Digital Wallet
 
-## Descrição
-Esta é uma aplicação de Carteira Digital (Wallet) construída com uma arquitetura baseada em microsserviços. Ela permite gerenciar transações como depósito de valores, saques de valores, compras, além de operações de cancelamento e estorno. A aplicação foi desenvolvida para suportar grandes volumes de transações, processando eventos.
+## Description
+This is a Digital Wallet application built with a microservices-based architecture. It allows you to manage transactions such as deposits, withdrawals, purchases, as well as cancellation and refund operations. The application was developed to support large volumes of transactions, processing events.
 
-## Funcionalidades
-- Adicionar saldo à carteira.
-- Retirar valores da carteira.
-- Realizar compras usando o saldo disponível.
-- Cancelar compras e reverter valores.
-- Emitir e processar eventos de transação.
-- Registrar e visualizar o extrato da carteira.
+## Features
+- Add balance to wallet.
+- Withdraw amounts from the wallet.
+- Make purchases using your available balance.
+- Cancel purchases and reverse values.
+- Issue and process transaction events.
+- Register and view the portfolio statement.
 
 ## Technologies and Techniques
 Node.js - NestJS - RabbitMQ - PostgreSQL - Docker - Clean Architecture
@@ -25,20 +25,25 @@ docker-container up --build
 
 ![image](https://github.com/user-attachments/assets/c41cdc68-ab87-4510-b0e7-fbbe1dc54105)
 
-## Prós e Contras da Arquitetura
-### Vantagens:
-Escalabilidade: A utilização de Filas auxilia na distribuição de carga resiliencia a picos de trafegos
-Desempenho: As filas permitem o processamento assyncrono, alívio de banco de dados.
-Isolamento de falhas: A arquitetura de microsserviços permite que problemas em um serviço não afete o restante.
+## Pros and Cons of Architecture
+### Advantages:
+Scalability: The use of Queues helps in load distribution and is resilient to traffic peaks
+Performance: Queues enable asynchronous processing, database relief.
+Fault isolation: Microservices architecture allows problems in one service not to affect the rest.
 
-### Desvantagens: 
-Complexidade: Microsserviços introduzem complexidade na gestão e comunicação entre serviços, além de aumentar a necessidade de orquestração e observabilidade.
-Manutenção: O número elevado de serviços pode dificultar a manutenção e exigir mais esforços de monitoramento.
-Latência: Para uma aplicação que necessita de uma resposta rápida e instantânea a escolha das filas nas comunicações podem prejudicar a velocidade das operações.
+### Disadvantages: 
+Complexity: Microservices introduce complexity in the management and communication between services, in addition to increasing the need for orchestration and observability.
+Maintenance: The high number of services can make maintenance difficult and require more monitoring efforts.
+Latency: For an application that requires a quick and instantaneous response, the choice of queues in communications can harm the speed of operations.
 
 
 ## Future improvements
-Uma mudança na estrutura do balance poderia fazer uma melhoria considerável. É: Deixar as informações de balance no mesmo microsserviço microsserviço da transação.
+- Place a balance structure in the transaction service
+- index balances in the database
+- create blocks for withdrawals or removal of money per wallet
 
-seria a indexação no banco de dados dos valores de balance de cada wallet.
+![image](https://github.com/user-attachments/assets/544d2830-8dad-441a-a2e7-05201a5a015e)
+
+
+
 
